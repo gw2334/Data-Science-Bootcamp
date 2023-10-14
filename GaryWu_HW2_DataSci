@@ -1,0 +1,33 @@
+Q1:
+SELECT COUNT(*) AS TotalCompletedOrders
+FROM Orders
+WHERE CompletionDate = '2023-03-18';
+Q2:
+SELECT COUNT(*) AS TotalJohnDoeOrders
+FROM Orders
+WHERE CompletionDate = '2023-03-18'
+AND FirstName = 'John'
+AND LastName = 'Doe';
+Q3:
+SELECT COUNT(DISTINCT CustomerID) AS TotalCustomersInJan2023,
+       AVG(AmountSpent) AS AverageAmountSpent
+FROM Orders
+WHERE YEAR(OrderDate) = 2023
+AND MONTH(OrderDate) = 1;
+Q4:
+SELECT DepartmentName
+FROM Departments
+WHERE DepartmentID IN (
+    SELECT DepartmentID
+    FROM Orders
+    WHERE YEAR(OrderDate) = 2022
+    GROUP BY DepartmentID
+    HAVING SUM(OrderAmount) < 600
+);
+Q5:
+SELECT MAX(OrderAmount) AS MaxRevenue, MIN(OrderAmount) AS MinRevenue
+FROM Orders;
+Q6:
+SELECT *
+FROM Orders
+WHERE OrderAmount = (SELECT MAX(OrderAmount) FROM Orders);
