@@ -1,0 +1,55 @@
+Q1: 
+a, b = 0, 1
+for _ in range(10):
+    print(a, end=" ")
+    a, b = b, a + b
+
+Q2: 
+my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+for i in range(1, len(my_list), 2):
+    print(my_list[i], end=" ")
+
+Q3:
+my_list = [1, 2, 3, 4, 5]
+print(my_list[::-1])
+
+Q4:
+string = """
+ChatGPT has created this text to provide tips on creating interesting paragraphs. 
+First, start with a clear topic sentence that introduces the main idea. 
+Then, support the topic sentence with specific details, examples, and evidence.
+Vary the sentence length and structure to keep the reader engaged.
+Finally, end with a strong concluding sentence that summarizes the main points.
+Remember, practice makes perfect!
+"""
+
+word_count = len(set(string.split()))
+print("Number of different words:", word_count)
+
+Q5:
+def count_vowels(word):
+    vowels = "aeiouAEIOU"
+    return sum(1 for char in word if char in vowels)
+
+# Example usage:
+word = "Hello"
+result = count_vowels(word)
+print("Number of vowels in", word, ":", result)
+
+Q6: 
+animals = ['tiger', 'elephant', 'monkey', 'zebra', 'panther']
+for animal in animals:
+    print(animal.upper())
+
+Q7:
+for num in range(1, 16):
+    if num % 2 == 0:
+        print(num, "is even")
+    else:
+        print(num, "is odd")
+
+Q8:
+num1 = int(input("Enter the first integer: "))
+num2 = int(input("Enter the second integer: "))
+result = num1 + num2
+print("Sum:", result)
