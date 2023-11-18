@@ -1,1 +1,144 @@
+Q1:
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
+
+# Assuming you have your data in X and y
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Fit the logistic regression model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predict probabilities
+probs = model.predict_proba(X_test)[:, 1]
+
+# Function to evaluate different thresholds
+def evaluate_threshold(threshold):
+    preds = (probs > threshold).astype(int)
+    accuracy = accuracy_score(y_test, preds)
+    precision = precision_score(y_test, preds)
+    recall = recall_score(y_test, preds)
+    return accuracy, precision, recall
+
+# Evaluate different thresholds
+thresholds = [0.3, 0.4, 0.5, 0.6, 0.7]
+for threshold in thresholds:
+    accuracy, precision, recall = evaluate_threshold(threshold)
+    print(f'Threshold: {threshold:.2f} - Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}')
+Q2:
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+# Assuming X is your feature matrix with different types of features
+
+# Define preprocessing steps
+numeric_features = ['numeric_feature1', 'numeric_feature2']
+categorical_features = ['categorical_feature1', 'categorical_feature2']
+
+numeric_transformer = Pipeline(steps=[
+    ('scaler', StandardScaler())])
+
+categorical_transformer = Pipeline(steps=[
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)])
+
+# Append classifier to preprocessing pipeline
+clf = Pipeline(steps=[('preprocessor', preprocessor),
+                      ('classifier', LogisticRegression())])
+
+# Fit the model
+clf.fit(X_train, y_train)
+
+Q3:
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+# Assuming X is your feature matrix with different types of features
+
+# Define preprocessing steps
+numeric_features = ['numeric_feature1', 'numeric_feature2']
+categorical_features = ['categorical_feature1', 'categorical_feature2']
+
+numeric_transformer = Pipeline(steps=[
+    ('scaler', StandardScaler())])
+
+categorical_transformer = Pipeline(steps=[
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)])
+
+# Append classifier to preprocessing pipeline
+clf = Pipeline(steps=[('preprocessor', preprocessor),
+                      ('classifier', LogisticRegression())])
+
+# Fit the model
+clf.fit(X_train, y_train)
+
+Q4:
+# Plot ROC curve for the logistic regression model
+fpr, tpr, thresholds = roc_curve(y_test, probs)
+roc_auc = roc_auc_score(y_test, probs)
+
+plt.figure(figsize=(8, 8))
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc='lower right')
+plt.show()
+
+Q5: 
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
+# Assuming you have your data in X
+# X = ...
+
+# Vary k and evaluate inertia and silhouette scores
+k_values = range(2, 11)
+inertia_scores = []
+silhouette_scores = []
+
+for k in k_values:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X)
+    
+    # Inertia (within-cluster sum of squares)
+    inertia_scores.append(kmeans.inertia_)
+    
+    # Silhouette Score
+    if k > 1:
+        silhouette_scores.append(silhouette_score(X, kmeans.labels_))
+    else:
+        silhouette_scores.append(None)
+
+# Plot the Inertia scores
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+plt.plot(k_values, inertia_scores, marker='o')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Inertia')
+plt.title('Inertia vs. Number of Clusters')
+
+# Plot the Silhouette scores
+plt.subplot(1, 2, 2)
+plt.plot(k_values[1:], silhouette_scores[1:], marker='o')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Silhouette Score')
+plt.title('Silhouette Score vs. Number of Clusters (excluding k=2)')
+plt.show()
 
